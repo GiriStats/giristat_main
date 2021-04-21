@@ -8,7 +8,7 @@ switcher = {
         'Рывок (сумма)':'Snatch_Summ'
     }
 
-def draw_three_medians(df, discipline, years, save, dpi):
+def draw_three_medians(df, discipline, years, save=False, dpi=80, test=False):
 
     medians_main = []
 
@@ -64,7 +64,7 @@ def draw_three_medians(df, discipline, years, save, dpi):
         filename='Median_catagories_' + switcher.get(discipline, 'UN') + '_CR_'  + str(years)  + '.png'
         plt.savefig(path+filename, dpi=dpi)
         
-    plt.show()
+    plt.show(not test)
     return None
 
 
@@ -103,7 +103,7 @@ def get_medians(df, year, discipline):
 
     return medians
 
-def draw_median(df, discipline, year, save, dpi):
+def draw_median(df, discipline, year, save=False, dpi=80, test=False):
 
     medians = get_medians(df, year, discipline)
     w_categories = get_categoties(year)
@@ -131,8 +131,8 @@ def draw_median(df, discipline, year, save, dpi):
         path = '../giristat/images/'
         filename='Median_catagories_' + switcher.get(discipline, 'UN') + '_CR_'  + str(year)  + '.png'
         plt.savefig(path+filename, dpi=dpi)
-        
-    plt.show()
+    
+    plt.show(not test)
     return None
     
 def get_ylim(discipline):
@@ -140,6 +140,8 @@ def get_ylim(discipline):
             ylim=(0,260)
         elif discipline=='Толчок ДЦ':
             ylim=(20,90)
+        elif discipline=='Толчок':
+            ylim=(0,200)
         else:
             ylim=(0,300)
         return ylim
