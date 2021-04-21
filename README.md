@@ -1,5 +1,11 @@
 # giristat
 
-This is going to be a small website for presenting the result and findings of kettlebell lifting data analysis.
+Here you can easily create plots and graphs and different kinds of visualization for kettlebell competition data. 
 
-See more here https://alekseidudchenko.github.io/giristat/
+The website https://alekseidudchenko.github.io/giristat/ uses plots built using this project.
+
+## Competitors and results per category
+## Medians for weight categories
+## An athlete dynamics over time
+
+
