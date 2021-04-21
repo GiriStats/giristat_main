@@ -11,7 +11,6 @@ def draw_median_and_mean(df, discipline, year, save, dpi):
     df_year_999 = df_year[df_year['в/к']==999]
 
     medians_year=[]
-
     medians_year.append(df_year_63[discipline].median())
     medians_year.append(df_year_68[discipline].median())
     medians_year.append(df_year_73[discipline].median())
@@ -55,13 +54,11 @@ def draw_median_and_mean(df, discipline, year, save, dpi):
     ax2.set_ylim(ylim)
     ax2.grid()
 
-
     plt.suptitle('Медианы для каждой в/к. ' + discipline + '. ЧР ' + str(year), 
                 size=22, 
                 color='g', y=1)
 
     fig.tight_layout(rect=[0, 0, 1, 0.95])
-
 
     switcher = {
         'Толчок ДЦ':'LC',
@@ -70,11 +67,9 @@ def draw_median_and_mean(df, discipline, year, save, dpi):
         'Рывок (сумма)':'Snatch_Summ'
     }
 
-    print(switcher.get(discipline, 'UN'))
-
-    filename='../Median_catagories_' + switcher.get(discipline, 'UN') + '_CR_'  + str(year)  + '.png'
-
     if save:
-        plt.savefig(filename, dpi=dpi)
+        path = '../giristat/images/'
+        filename='Median_catagories_' + switcher.get(discipline, 'UN') + '_CR_'  + str(year)  + '.png'
+        plt.savefig(path+filename, dpi=dpi)
         
     plt.show()
