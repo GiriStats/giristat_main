@@ -10,61 +10,42 @@ switcher = {
 
 def draw_three_medians(df, discipline, years, save, dpi):
 
-    medians1 = get_medians(df, years[0], discipline)
-    medians2 = get_medians(df, years[1], discipline)
-    medians3 = get_medians(df, years[2], discipline)
+    medians_main = []
 
+    for year in years:
+        medians_main.append(get_medians(df, year, discipline))
+
+    #todo make possible to have different categories.
     w_categories_str, w_categories_str = get_categoties(years[0])
 
     if discipline == "Сумма дв-рья":
-        medians1_snatch = get_medians(df, years[0], "Рывок (сумма)")
-        medians1_jerk = get_medians(df, years[0], "Толчок")
-        medians2_snatch  = get_medians(df, years[1], "Рывок (сумма)")
-        medians2_jerk = get_medians(df, years[1], "Толчок")
-        medians3_snatch = get_medians(df, years[2], "Рывок (сумма)")
-        medians3_jerk = get_medians(df, years[2], "Толчок")
+        medians_snatch = []
+        medians_jerk = []
 
+        for year in years:
+            medians_snatch.append(get_medians(df, year, "Рывок (сумма)"))
+            medians_jerk.append(get_medians(df, year, "Толчок"))
 
-    if discipline=='Сумма дв-рья':
-        ylim=(0,260)
-    elif discipline=='Толчок ДЦ':
-        ylim=(20,90)
-    else:
-        ylim=(0,300)
+    ylim = newmethod431(discipline)
    
     fig, axes = plt.subplots(1,3, figsize=(10,4))
 
-    axes[0].plot(w_categories_str, medians1, color='r', label='Сумма')
-    axes[0].plot(w_categories_str, medians1, 'ro')
-    axes[0].set_title(years[0], color='g')
-
-    axes[1].plot(w_categories_str, medians2, color='r')
-    axes[1].plot(w_categories_str, medians2, 'ro')
-    axes[1].set_title(years[1], color='g')
-
-    axes[2].plot(w_categories_str, medians3, color='r')
-    axes[2].plot(w_categories_str, medians3, 'ro')
-    axes[2].set_title(years[2], color='g')
+    for i in range(3):
+        axes[i].plot(w_categories_str, medians_main[i], color='r', label='Сумма')
+        axes[i].plot(w_categories_str, medians_main[i], 'ro')
+        axes[i].set_title(years[i], color='g')
 
     if discipline=='Сумма дв-рья':
-        axes[0].plot(w_categories_str, medians1_snatch, color='g', label='Рывок')
-        axes[0].plot(w_categories_str, medians1_snatch, 'go')
-        axes[0].plot(w_categories_str, medians1_jerk, color='b', label='Толчок')
-        axes[0].plot(w_categories_str, medians1_jerk, 'bo')
-
-        axes[1].plot(w_categories_str, medians2_snatch, color='g')
-        axes[1].plot(w_categories_str, medians2_snatch, 'go')
-        axes[1].plot(w_categories_str, medians2_jerk, color='b')
-        axes[1].plot(w_categories_str, medians2_jerk, 'bo')
-
-        axes[2].plot(w_categories_str, medians3_snatch, color='g')
-        axes[2].plot(w_categories_str, medians3_snatch, 'go')
-        axes[2].plot(w_categories_str, medians3_jerk, color='b')
-        axes[2].plot(w_categories_str, medians3_jerk, 'bo')
+        for i in range(3):
+            axes[i].plot(w_categories_str, medians_snatch[i], color='g', label='Рывок')
+            axes[i].plot(w_categories_str, medians_snatch[i], 'go')
+            axes[i].plot(w_categories_str, medians_jerk[i], color='g', label='Толчок')
+            axes[i].plot(w_categories_str, medians_jerk[i], 'bo')
 
         plt.suptitle('Медианы для каждой в/к. Двоеборье.', 
                 size=22, 
                 color='g', y=1)
+
     else:
         plt.suptitle('Медианы для каждой в/к. ' + discipline + '.', 
                 size=22, 
@@ -86,8 +67,6 @@ def draw_three_medians(df, discipline, years, save, dpi):
         plt.savefig(path+filename, dpi=dpi)
         
     plt.show()
-
-
     return None
 
 
@@ -129,29 +108,22 @@ def get_medians(df, year, discipline):
 def draw_median(df, discipline, year, save, dpi):
 
     medians = get_medians(df, year, discipline)
+    w_categories = get_categoties(year)
 
-    if discipline=='Сумма дв-рья':
-        ylim=(0,260)
-    elif discipline=='Толчок ДЦ':
-        ylim=(20,90)
-    else:
-        ylim=(0,300)
+    ylim = newmethod431(discipline)
    
-    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,5.5))
+    fig, axes = plt.subplots(1,2, figsize=(10,5.5))
 
-    ax1.plot(w_categories, medians, 'r')
-    ax1.plot(w_categories, medians, 'ro', label='медиана')
-    ax1.set_xticks(w_categories)
-    ax1.set_xlabel('в/к')
-    ax1.set_yticks(medians)
-    ax1.grid()
-    ax1.legend(loc='upper left')
-
-    ax2.plot(w_categories_str, medians, color='r')
-    ax2.plot(w_categories_str, medians, 'ro')
-    ax2.set_xlabel('в/к')
-    ax2.set_ylim(ylim)
-    ax2.grid()
+    for i in range(2):
+        axes[i].plot(w_categories[i], medians, 'r')
+        axes[i].plot(w_categories[i], medians, 'ro', label='медиана')
+        axes[i].set_xticks(w_categories[i])
+        axes[i].set_xlabel('в/к')
+        axes[i].grid()
+    
+    axes[0].set_yticks(medians)
+    axes[0].legend(loc='upper left')
+    axes[1].set_ylim(ylim)
 
     plt.suptitle('Медианы для каждой в/к. ' + discipline + '. ЧР ' + str(year), 
                 size=22, 
@@ -165,3 +137,12 @@ def draw_median(df, discipline, year, save, dpi):
         plt.savefig(path+filename, dpi=dpi)
         
     plt.show()
+    return Nonedef newmethod431(discipline):
+    if discipline=='Сумма дв-рья':
+        ylim=(0,260)
+    elif discipline=='Толчок ДЦ':
+        ylim=(20,90)
+    else:
+        ylim=(0,300)
+    return ylim
+
