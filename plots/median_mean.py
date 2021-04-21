@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-def draw_median_and_mean(df, discipline, year, save, dpi):
+def draw_median(df, discipline, year, save, dpi):
 
     df_year = df[df['Год']==year]
 
