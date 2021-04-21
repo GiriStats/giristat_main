@@ -25,9 +25,7 @@ def draw_three_medians(df, discipline, years, save, dpi):
         for year in years:
             medians_snatch.append(get_medians(df, year, "Рывок (сумма)"))
             medians_jerk.append(get_medians(df, year, "Толчок"))
-
-    ylim = newmethod431(discipline)
-   
+  
     fig, axes = plt.subplots(1,3, figsize=(10,4))
 
     for i in range(3):
@@ -55,7 +53,7 @@ def draw_three_medians(df, discipline, years, save, dpi):
 
     for ax in axes:
         ax.set_xlabel('в/к')
-        ax.set_ylim(ylim)
+        ax.set_ylim(get_ylim(discipline))
         ax.grid()
 
 
@@ -109,8 +107,6 @@ def draw_median(df, discipline, year, save, dpi):
 
     medians = get_medians(df, year, discipline)
     w_categories = get_categoties(year)
-
-    ylim = newmethod431(discipline)
    
     fig, axes = plt.subplots(1,2, figsize=(10,5.5))
 
@@ -123,7 +119,7 @@ def draw_median(df, discipline, year, save, dpi):
     
     axes[0].set_yticks(medians)
     axes[0].legend(loc='upper left')
-    axes[1].set_ylim(ylim)
+    axes[1].set_ylim(get_ylim(discipline))
 
     plt.suptitle('Медианы для каждой в/к. ' + discipline + '. ЧР ' + str(year), 
                 size=22, 
@@ -137,12 +133,14 @@ def draw_median(df, discipline, year, save, dpi):
         plt.savefig(path+filename, dpi=dpi)
         
     plt.show()
-    return Nonedef newmethod431(discipline):
-    if discipline=='Сумма дв-рья':
-        ylim=(0,260)
-    elif discipline=='Толчок ДЦ':
-        ylim=(20,90)
-    else:
-        ylim=(0,300)
-    return ylim
+    return None
+    
+def get_ylim(discipline):
+        if discipline=='Сумма дв-рья':
+            ylim=(0,260)
+        elif discipline=='Толчок ДЦ':
+            ylim=(20,90)
+        else:
+            ylim=(0,300)
+        return ylim
 
