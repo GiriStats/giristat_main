@@ -40,4 +40,6 @@ c.draw_cartesian(df, category=63, year=2020, save=True, dpi=100)
 
 ### An athlete dynamics over time
 
+comming soon
+
 
