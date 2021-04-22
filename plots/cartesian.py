@@ -7,7 +7,7 @@ import plots.median as mm
 
 
 
-def draw_cartesian(df, category, year):
+def draw_cartesian(df, category, year, save=False, dpi=100, test=False):
 
     df = df[df['Вид']=='Двоеборье']
 
@@ -19,7 +19,7 @@ def draw_cartesian(df, category, year):
     axis_label_color='g'
     title = 'Двоеборье. в/к ' + str(category) + '. ' + str(year)
 
-    fig, axes = plt.subplots(1,1, figsize=(6,5))
+    fig, axes = plt.subplots(1,1, figsize=(12,10))
 
     text_63 = 'median jerk = ' + str(median_jerk) + ' median snatch = ' + str(median_snatch)
 
@@ -38,7 +38,21 @@ def draw_cartesian(df, category, year):
     axes.set_ylabel('рывок', size=axis_label_size, color=axis_label_color, rotation=0)
     axes.yaxis.set_label_coords(0.40, 0.95)
 
-    axes.legend(loc='lower left')
+    # axes.legend(loc='lower left')
+
+    for i in df.index:
+        axes.annotate(df['name'][i], (df['Толчок'][i], df['Рывок (сумма)'][i]))
+
+    for i in df.index:
+        axes.annotate(str(df['Место'][i])+'  ', (df['Толчок'][i], df['Рывок (сумма)'][i]), ha='right', color='b')
+
+    plt.tight_layout()
+
+    if save:
+        path = '../giristat/images/'
+        filename='snatch_jerck_scatter' + str(category) + '_CR_'  + str(year)  + '.png'
+        plt.savefig(path+filename, dpi=dpi)
 
 
-    plt.show()
+    plt.show(not test)
+    return None
