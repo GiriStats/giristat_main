@@ -9,6 +9,13 @@ The website https://alekseidudchenko.github.io/giristat/ uses plots built using 
 ### Competitors and results per category
 coming soon
 
+#### example
+```python
+
+```
+
+![image](https://sun9-76.userapi.com/impg/DgWPloctiLc7QgYEamj7btzcWOS9pHx6cDvUSA/zXfJYYdGJRE.jpg?size=2560x948&quality=96&sign=f63ac0b2c34880ee07c15404ed205c98)
+
 ### Medians for weight categories
 ```python
 draw_three_medians(df, discipline, years, save, dpi)
