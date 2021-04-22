@@ -11,7 +11,7 @@ coming soon
 
 #### example
 ```python
-
+some.python.code()
 ```
 
 ![image](https://sun9-76.userapi.com/impg/DgWPloctiLc7QgYEamj7btzcWOS9pHx6cDvUSA/zXfJYYdGJRE.jpg?size=2560x948&quality=96&sign=f63ac0b2c34880ee07c15404ed205c98)
