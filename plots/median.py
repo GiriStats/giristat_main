@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 
-
 switcher = {
         'Толчок ДЦ':'LC',
         'Сумма дв-рья':'BI',
@@ -68,6 +67,40 @@ def draw_three_medians(df, discipline, years, save=False, dpi=80, test=False):
     return None
 
 
+def draw_median(df, discipline, year, save=False, dpi=80, test=False):
+
+    medians = get_medians(df, year, discipline)
+    w_categories = get_categoties(year)
+   
+    fig, axes = plt.subplots(1,2, figsize=(10,5.5))
+
+    for i in range(2):
+        axes[i].plot(w_categories[i], medians, 'r')
+        axes[i].plot(w_categories[i], medians, 'ro', label='медиана')
+        axes[i].set_xticks(w_categories[i])
+        axes[i].set_xlabel('в/к')
+        axes[i].grid()
+    
+    axes[0].set_yticks(medians)
+    axes[0].legend(loc='upper left')
+    axes[1].set_ylim(get_ylim(discipline))
+
+    plt.suptitle('Медианы для каждой в/к. ' + discipline + '. ЧР ' + str(year), 
+                size=22, 
+                color='g', y=1)
+
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+
+    if save:
+        path = '../giristat/images/'
+        filename='Median_catagories_' + switcher.get(discipline, 'UN') + '_CR_'  + str(year)  + '.png'
+        plt.savefig(path+filename, dpi=dpi)
+    
+    plt.show(not test)
+    return None
+
+
+
 def get_categoties(year):
     if year == 2017:
         w_categories=[63, 68, 73, 78, 85, 95, 100]
@@ -102,38 +135,6 @@ def get_medians(df, year, discipline):
         medians.insert(5, df_year_95[discipline].median())
 
     return medians
-
-def draw_median(df, discipline, year, save=False, dpi=80, test=False):
-
-    medians = get_medians(df, year, discipline)
-    w_categories = get_categoties(year)
-   
-    fig, axes = plt.subplots(1,2, figsize=(10,5.5))
-
-    for i in range(2):
-        axes[i].plot(w_categories[i], medians, 'r')
-        axes[i].plot(w_categories[i], medians, 'ro', label='медиана')
-        axes[i].set_xticks(w_categories[i])
-        axes[i].set_xlabel('в/к')
-        axes[i].grid()
-    
-    axes[0].set_yticks(medians)
-    axes[0].legend(loc='upper left')
-    axes[1].set_ylim(get_ylim(discipline))
-
-    plt.suptitle('Медианы для каждой в/к. ' + discipline + '. ЧР ' + str(year), 
-                size=22, 
-                color='g', y=1)
-
-    fig.tight_layout(rect=[0, 0, 1, 0.95])
-
-    if save:
-        path = '../giristat/images/'
-        filename='Median_catagories_' + switcher.get(discipline, 'UN') + '_CR_'  + str(year)  + '.png'
-        plt.savefig(path+filename, dpi=dpi)
-    
-    plt.show(not test)
-    return None
     
 def get_ylim(discipline):
         if discipline=='Сумма дв-рья':
