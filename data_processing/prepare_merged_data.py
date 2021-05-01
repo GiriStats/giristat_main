@@ -43,3 +43,10 @@ def get_df():
     df.loc[(df['Год'] != 2017) & (df['vk']=='999'), 'vk'] = "85+"
 
     return df
+
+
+def get_norms(year):
+    norms = pd.read_csv('source/norms.csv')
+    year_norms = norms[(norms['year_from']==year) | (norms['year_to']==year) | (norms['year2']==year) | (norms['year3']==year)]
+    return year_norms
+

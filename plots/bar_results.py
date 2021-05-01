@@ -7,6 +7,7 @@ import plots.median as mm
 
 
 
+
 def bar_resultsLC(df, category, year, save=False, dpi=80, test=False):
 
     df = df[(df['в/к'] == category) & (df['Год']==year)& (df['Вид']=='ДЦ')]
@@ -26,7 +27,6 @@ def bar_resultsLC(df, category, year, save=False, dpi=80, test=False):
     ax.bar(silver['Ф.И.'], (silver['Толчок ДЦ']), color='silver', zorder=3, alpha=1)
     ax.bar(bronze['Ф.И.'], (bronze['Толчок ДЦ']), color='orange', zorder=3, alpha=1)
 
-    # ax.set_yticks([30,35,40,45,50,55,60,65,70,75,80,85,90])    
     ax.set_xticks([])
     ax.grid(axis='y', zorder=0)
     ax.set_ylabel('Толчок ДЦ', size=18)
@@ -54,7 +54,6 @@ def bar_resultsLC(df, category, year, save=False, dpi=80, test=False):
                     (b.get_x(), b.get_height()), 
                     color='dimgray',
                     size=30)
-
 
 
     plt.tight_layout()
@@ -126,6 +125,24 @@ def bar_resultsBI(df, category, year, save=False, dpi=80, test=False):
         i=i+1
 
 
+    
+    norms = perd.get_norms(year)
+    norms_bi = norms[(norms['discipline'] == "BI")]
+
+    msmk_bi_cat = norms_bi[(norms['title'] == "MSMK") & (norms_bi['weight_category'] == category)]
+    ms_bi_cat = norms_bi[(norms['title'] == "MS") & (norms_bi['weight_category'] == category)]
+    kms_bi_cat = norms_bi[(norms['title'] == "KMS") & (norms_bi['weight_category'] == category)]
+
+    print(category)
+    print(msmk_bi_cat['result'].values)
+    print(ms_bi_cat['result'].values)
+    print(kms_bi_cat['result'].values)    
+    
+    plt.axhline(y=msmk_bi_cat['result'].values, color='r', linestyle='-')
+    plt.axhline(y=ms_bi_cat['result'].values, color='g', linestyle='-')
+    plt.axhline(y=kms_bi_cat['result'].values, color='b', linestyle='-')
+
+
 
     plt.tight_layout()
 
@@ -152,8 +169,6 @@ def bar_result_weightLC(df, category, year, save=False, dpi=80, test=False):
 
     # ymin = df['Соб. вес'].min()
     weight_ylim=(50,120)
-
-    # print(str(category) +  ': ' + str(ymin))
 
 
     # figure_width=len(df[discipline])*0.8
@@ -229,7 +244,6 @@ def bar_result_weightLC(df, category, year, save=False, dpi=80, test=False):
         else:
             filename='bar_results_weightLC' + str(category) + '_CR_'  + str(year)  + '.png'
         plt.savefig(path+filename, dpi=dpi)
-
 
     plt.show(not test)
     return None
