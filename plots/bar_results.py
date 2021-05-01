@@ -148,17 +148,22 @@ def draw_master_lines(year, category):
 
     msmk_bi_cat = norms_bi[(norms['title'] == "MSMK") & (norms_bi['weight_category'] == category)]
     ms_bi_cat = norms_bi[(norms['title'] == "MS") & (norms_bi['weight_category'] == category)]
-    kms_bi_cat = norms_bi[(norms['title'] == "KMS") & (norms_bi['weight_category'] == category)]
+    kms_bi_cat = norms_bi[(norms['title'] == "KMS") & (norms_bi['weight_category'] == category)]  
 
-    print(category)
-    print(msmk_bi_cat['result'].values)
-    print(ms_bi_cat['result'].values)
-    print(kms_bi_cat['result'].values)    
+    msmk = msmk_bi_cat.iloc[0]['result']
+    ms = ms_bi_cat.iloc[0]['result']
+    kms = kms_bi_cat.iloc[0]['result']
 
-    plt.axhline(y=msmk_bi_cat['result'].values, color='r', linestyle='-')
-    plt.axhline(y=ms_bi_cat['result'].values, color='g', linestyle='-')
-    plt.axhline(y=kms_bi_cat['result'].values, color='b', linestyle='-')
+    msmk_legend="МСМК " + str(msmk)
+    ms_legend="МС " + str(ms)
+    kms_legend="KМС " + str(kms)
 
+    plt.axhline(y=msmk, color='r', linestyle='-', linewidth=3, label=msmk_legend)
+    plt.axhline(y=ms, color='g', linestyle='-', linewidth=3, label=ms_legend)
+    plt.axhline(y=kms, color='b', linestyle='-', linewidth=3, label=kms_legend)
+
+    plt.legend()
+    plt.setp(plt.gca().get_legend().get_texts(), fontsize='15') 
 
 def bar_result_weightLC(df, category, year, save=False, dpi=80, test=False):
 
