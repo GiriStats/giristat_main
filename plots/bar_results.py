@@ -31,7 +31,10 @@ def bar_resultsLC(df, category, year, save=False, dpi=80, test=False):
     ax.grid(axis='y', zorder=0)
     ax.set_ylabel('Толчок ДЦ', size=18)
 
-    ax.set_title('Чемпионат России ' + str(year) + '. ДЦ, вк ' + str(category), color=title_color, fontsize=32)
+    if category==999:
+        ax.set_title('Чемпионат России ' + str(year) + '. ДЦ, вк ' + df['vk'].any(), color=title_color, fontsize=32)
+    else:
+        ax.set_title('Чемпионат России ' + str(year) + '. ДЦ, вк ' + str(category), color=title_color, fontsize=32)
 
     lenght=int(len(ax.patches)/2-1)
 
@@ -96,7 +99,10 @@ def bar_resultsBI(df, category, year, save=False, dpi=80, test=False):
     ax.grid(axis='y', zorder=0)
     ax.set_ylabel(discipline, size=18)
 
-    ax.set_title('Чемпионат России ' + str(year) + '. Двоеборье, вк ' + str(category), color=title_color, fontsize=32)
+    if category==999:
+        ax.set_title('Чемпионат России ' + str(year) + '. Двоеборье, вк ' + df['vk'].any(), color=title_color, fontsize=32)
+    else:
+        ax.set_title('Чемпионат России ' + str(year) + '. Двоеборье, вк ' + str(category), color=title_color, fontsize=32)
 
     lenght=int(len(ax.patches)/2-1)
 
@@ -209,7 +215,10 @@ def bar_result_weightLC(df, category, year, save=False, dpi=80, test=False):
 
 
 
-    ax1.set_title('Чемпионат России ' + str(year) + '. ДЦ, вк ' + str(category), color=title_color, fontsize=32)
+    if category==999:
+        ax1.set_title('Чемпионат России ' + str(year) + '. ДЦ, вк ' + df['vk'].any(), color=title_color, fontsize=32)
+    else:
+        ax1.set_title('Чемпионат России ' + str(year) + '. ДЦ, вк ' + str(category), color=title_color, fontsize=32)
 
     plt.tight_layout()
 
