@@ -124,25 +124,8 @@ def bar_resultsBI(df, category, year, save=False, dpi=80, test=False):
                     size=30)
         i=i+1
 
-
-    
-    norms = perd.get_norms(year)
-    norms_bi = norms[(norms['discipline'] == "BI")]
-
-    msmk_bi_cat = norms_bi[(norms['title'] == "MSMK") & (norms_bi['weight_category'] == category)]
-    ms_bi_cat = norms_bi[(norms['title'] == "MS") & (norms_bi['weight_category'] == category)]
-    kms_bi_cat = norms_bi[(norms['title'] == "KMS") & (norms_bi['weight_category'] == category)]
-
-    print(category)
-    print(msmk_bi_cat['result'].values)
-    print(ms_bi_cat['result'].values)
-    print(kms_bi_cat['result'].values)    
-    
-    plt.axhline(y=msmk_bi_cat['result'].values, color='r', linestyle='-')
-    plt.axhline(y=ms_bi_cat['result'].values, color='g', linestyle='-')
-    plt.axhline(y=kms_bi_cat['result'].values, color='b', linestyle='-')
-
-
+    draw_master_lines(year, category)
+    #todo add xticks
 
     plt.tight_layout()
 
@@ -157,6 +140,24 @@ def bar_resultsBI(df, category, year, save=False, dpi=80, test=False):
 
     plt.show(not test)
     return None
+
+def draw_master_lines(year, category):
+    #todo add for LC and weight-result
+    norms = perd.get_norms(year)
+    norms_bi = norms[(norms['discipline'] == "BI")]
+
+    msmk_bi_cat = norms_bi[(norms['title'] == "MSMK") & (norms_bi['weight_category'] == category)]
+    ms_bi_cat = norms_bi[(norms['title'] == "MS") & (norms_bi['weight_category'] == category)]
+    kms_bi_cat = norms_bi[(norms['title'] == "KMS") & (norms_bi['weight_category'] == category)]
+
+    print(category)
+    print(msmk_bi_cat['result'].values)
+    print(ms_bi_cat['result'].values)
+    print(kms_bi_cat['result'].values)    
+
+    plt.axhline(y=msmk_bi_cat['result'].values, color='r', linestyle='-')
+    plt.axhline(y=ms_bi_cat['result'].values, color='g', linestyle='-')
+    plt.axhline(y=kms_bi_cat['result'].values, color='b', linestyle='-')
 
 
 def bar_result_weightLC(df, category, year, save=False, dpi=80, test=False):
