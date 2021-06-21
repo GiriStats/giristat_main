@@ -1,11 +1,7 @@
 import sys 
 sys.path.append("/home/aleksei/Dropbox/GiriStat/giristat_main")
 import data_processing.prepare_merged_data as perd
-
 import plots.bar_results as br
-
-
-
 
 
 df = perd.get_df()
