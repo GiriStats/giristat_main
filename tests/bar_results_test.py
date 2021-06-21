@@ -16,7 +16,7 @@ df = perd.get_df()
 categories=set(df[df['Год']==2020]['в/к'])
 
 for category in categories:
-    br.bar_resultsBI(df, category, 2020, save=False, test=False)
+    br.bar_resultsBI(df, category, 2020, save=False, test=True)
     # br.bar_result_weightLC(df, category, 2020, save=True, test=True)
     # br.bar_resultsLC(df, category, 2020, save=True, test=True)
 # br.bar_resultsLC(df, 999, 2020, save=False, test=False)
