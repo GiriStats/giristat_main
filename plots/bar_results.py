@@ -3,10 +3,10 @@ import sys
 sys.path.append("/home/aleksei/Dropbox/GiriStat/giristat_main")
 import data_processing.prepare_merged_data as perd
 
-
+# join methods for BI and LC
 def bar_resultsLC(df, category, year, save=False, dpi=80, test=False):
-
-    df = df[(df['в/к'] == category) & (df['Год'] == year) & (df['Вид'] == 'ДЦ')]
+    discipline_title = 'ДЦ'
+    df = df[(df['в/к'] == category) & (df['Год'] == year) & (df['Вид'] == discipline_title)]
 
     names = df['Ф.И.']
     gold = df[:1]
@@ -28,13 +28,13 @@ def bar_resultsLC(df, category, year, save=False, dpi=80, test=False):
     ax.set_ylabel('Толчок ДЦ', size=18)
 
     if category == 999:
-        ax.set_title('Чемпионат России ' + str(year) + '. ДЦ, вк ' + df['vk'].any(), color=title_color, fontsize=32)
+        ax.set_title('Чемпионат России ' + str(year) + '. ' + discipline_title + ', вк ' + df['vk'].any(), color=title_color, fontsize=32)
     else:
-        ax.set_title('Чемпионат России ' + str(year) + '. ДЦ, вк ' + str(category), color=title_color, fontsize=32)
+        ax.set_title('Чемпионат России ' + str(year) + '. ' + discipline_title + ', вк ' + str(category), color=title_color, fontsize=32)
 
     lenght = int(len(ax.patches)/2-1)
 
-    i=0
+    i = 0
     for b in ax.patches[:lenght]:
         ax.annotate(str(names.values[i]), 
                     (b.get_x()+b.get_width()/2, 2), 
@@ -43,7 +43,7 @@ def bar_resultsLC(df, category, year, save=False, dpi=80, test=False):
                     ha='center',
                     rotation=90,
                     size=30)
-        i=i+1
+        i = i+1
 
     for b in ax.patches[int(len(ax.patches)/2):]:
         ax.annotate(str(int(b.get_height())), 
@@ -51,34 +51,36 @@ def bar_resultsLC(df, category, year, save=False, dpi=80, test=False):
                     color='dimgray',
                     size=30)
 
-    draw_master_lines(year, category, "LC")
+    draw_master_lines(year, category, discipline_title)
 
     plt.tight_layout()
 
     if save:
         path = '../giristat/images/'
-        if category==999:
-            filename='bar_resultsLC85+_CR_'  + str(year)  + '.png'
+        if category == 999:
+            filename = 'bar_resultsLC85+_CR_' + str(year) + '.png'
         else:
-            filename='bar_resultsLC' + str(category) + '_CR_'  + str(year)  + '.png'
+            filename = 'bar_resultsLC' + str(category) + '_CR_' + str(year) + '.png'
         plt.savefig(path+filename, dpi=dpi)
 
     plt.show(not test)
     return None
 
-
+# join methods for BI and LC
 def bar_resultsBI(df, category, year, save=False, dpi=80, test=False):
-    discipline='Сумма дв-рья'
-    df = df[(df['в/к'] == category) & (df['Год']==year)& (df['Вид']=='Двоеборье')]
+    discipline = 'Сумма дв-рья'
+    discipline_title = 'Двоеборье'
+
+    df = df[(df['в/к'] == category) & (df['Год'] == year) & (df['Вид'] == discipline_title)]
 
     df['sum_str'] = df[discipline].map('{0:g}'.format)
     sums = df['sum_str']
-    names = df['Ф.И.']
     
+    names = df['Ф.И.']
     gold = df[:1]
     silver = df[1:2]
     bronze = df[2:3]
-    title_color = 'g' #'navy'
+    title_color = 'g'
 
     figure_width = len(df)
 
@@ -94,9 +96,9 @@ def bar_resultsBI(df, category, year, save=False, dpi=80, test=False):
     ax.set_ylabel(discipline, size=18)
 
     if category == 999:
-        ax.set_title('Чемпионат России ' + str(year) + '. Двоеборье, вк ' + df['vk'].any(), color=title_color, fontsize=32)
+        ax.set_title('Чемпионат России ' + str(year) + '. ' + discipline_title + ', вк ' + df['vk'].any(), color=title_color, fontsize=32)
     else:
-        ax.set_title('Чемпионат России ' + str(year) + '. Двоеборье, вк ' + str(category), color=title_color, fontsize=32)
+        ax.set_title('Чемпионат России ' + str(year) + '. ' + discipline_title + ', вк ' + str(category), color=title_color, fontsize=32)
 
     lenght = int(len(ax.patches)/2-1)
 
@@ -119,7 +121,7 @@ def bar_resultsBI(df, category, year, save=False, dpi=80, test=False):
                     size=30)
         i = i+1
 
-    draw_master_lines(year, category, "BI")
+    draw_master_lines(year, category, discipline_title)
     #todo add xticks
 
     plt.tight_layout()
@@ -136,8 +138,13 @@ def bar_resultsBI(df, category, year, save=False, dpi=80, test=False):
     return None
 
 
-def draw_master_lines(year, category, discipline):
+def draw_master_lines(year, category, discipline_title):
     norms = perd.get_norms(year)
+    if discipline_title == 'Двоеборье':
+        discipline = "BI"
+    elif discipline_title == "ДЦ":
+        discipline = "LC"
+
     norms_bi = norms[(norms['discipline'] == discipline)]
 
     msmk_bi_cat = norms_bi[(norms['title'] == "MSMK") & (norms_bi['weight_category'] == category)]
@@ -214,7 +221,6 @@ def bar_result_weightLC(df, category, year, save=False, dpi=80, test=False):
                     size=20,
                     rotation=90,)
         i = i+1
-        
 
     i = 0
     for b in ax1.patches:
@@ -226,8 +232,6 @@ def bar_result_weightLC(df, category, year, save=False, dpi=80, test=False):
                     ha='left',
                     rotation=90)
         i = i+1
-
-
 
     if category == 999:
         ax1.set_title('Чемпионат России ' + str(year) + '. ДЦ, вк ' + df['vk'].any(), color=title_color, fontsize=32)
