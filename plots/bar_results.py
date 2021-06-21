@@ -6,13 +6,13 @@ import data_processing.prepare_merged_data as perd
 
 def bar_resultsLC(df, category, year, save=False, dpi=80, test=False):
 
-    df = df[(df['в/к'] == category) & (df['Год']==year)& (df['Вид']=='ДЦ')]
+    df = df[(df['в/к'] == category) & (df['Год'] == year) & (df['Вид'] == 'ДЦ')]
 
     names = df['Ф.И.']
     gold = df[:1]
     silver = df[1:2]
     bronze = df[2:3]
-    title_color = 'g' #'navy'
+    title_color = 'g'
 
     figure_width = len(df)
 
@@ -51,6 +51,8 @@ def bar_resultsLC(df, category, year, save=False, dpi=80, test=False):
                     color='dimgray',
                     size=30)
 
+    draw_master_lines(year, category, "LC")
+
     plt.tight_layout()
 
     if save:
@@ -66,7 +68,6 @@ def bar_resultsLC(df, category, year, save=False, dpi=80, test=False):
 
 
 def bar_resultsBI(df, category, year, save=False, dpi=80, test=False):
-
     discipline='Сумма дв-рья'
     df = df[(df['в/к'] == category) & (df['Год']==year)& (df['Вид']=='Двоеборье')]
 
@@ -118,7 +119,7 @@ def bar_resultsBI(df, category, year, save=False, dpi=80, test=False):
                     size=30)
         i = i+1
 
-    draw_master_lines(year, category)
+    draw_master_lines(year, category, "BI")
     #todo add xticks
 
     plt.tight_layout()
@@ -134,10 +135,10 @@ def bar_resultsBI(df, category, year, save=False, dpi=80, test=False):
     plt.show(not test)
     return None
 
-def draw_master_lines(year, category):
-    #todo add for LC and weight-result
+
+def draw_master_lines(year, category, discipline):
     norms = perd.get_norms(year)
-    norms_bi = norms[(norms['discipline'] == "BI")]
+    norms_bi = norms[(norms['discipline'] == discipline)]
 
     msmk_bi_cat = norms_bi[(norms['title'] == "MSMK") & (norms_bi['weight_category'] == category)]
     ms_bi_cat = norms_bi[(norms['title'] == "MS") & (norms_bi['weight_category'] == category)]
@@ -158,10 +159,10 @@ def draw_master_lines(year, category):
     plt.legend()
     plt.setp(plt.gca().get_legend().get_texts(), fontsize='15') 
 
-def bar_result_weightLC(df, category, year, save=False, dpi=80, test=False):
 
-    discipline='Толчок ДЦ'
-    df = df[(df['в/к'] == category) & (df['Год']==year)& (df['Вид']=='ДЦ')]
+def bar_result_weightLC(df, category, year, save=False, dpi=80, test=False):
+    discipline = 'Толчок ДЦ'
+    df = df[(df['в/к'] == category) & (df['Год'] == year) & (df['Вид'] == 'ДЦ')]
 
     results = df[discipline].map('{0:g}'.format)
     names = df['Ф.И.']
