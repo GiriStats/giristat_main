@@ -1,23 +1,20 @@
 import matplotlib.pyplot as plt
-import numpy as np
-import sys 
+import sys
 sys.path.append("/home/aleksei/Dropbox/GiriStat/giristat_main")
-import data_processing.prepare_merged_data as perd
-import plots.median as mm
 
-snatch='Рывок (очки)'
+snatch = 'Рывок (очки)'
 
 
 def draw_cartesian(df, category, year, save=False, dpi=100, test=False):
 
-    df = df[df['Вид']=='Двоеборье']
+    df = df[df['Вид'] == 'Двоеборье']
 
-    df = df[(df['в/к']==category) & (df['Год']==year)]
+    df = df[(df['в/к'] == category) & (df['Год'] == year)]
     median_snatch = df[snatch].median()
     median_jerk = df['Толчок'].median()
 
-    axis_label_size=13
-    axis_label_color='g'
+    axis_label_size = 13
+    axis_label_color = 'g'
     if category == 999:
         if year == 2017:
             title = 'Двоеборье. в/к 95+. ' + str(year)
@@ -26,10 +23,9 @@ def draw_cartesian(df, category, year, save=False, dpi=100, test=False):
     else:
         title = 'Двоеборье. в/к ' + str(category) + '. ' + str(year)
 
-    fig, axes = plt.subplots(1,1, figsize=(12,10))
+    fig, axes = plt.subplots(1, 1, figsize=(12, 10))
 
     text_medians = 'median jerk = ' + str(median_jerk) + ' median snatch = ' + str(median_snatch)
-
 
     axes.set_title(title, size=19, color='g')
     axes.scatter(df['Толчок'], df[snatch], color='b', label=text_medians)
@@ -57,12 +53,11 @@ def draw_cartesian(df, category, year, save=False, dpi=100, test=False):
 
     if save:
         path = '../giristat/images/'
-        if category==999:
-            filename='snatch_jerck_scatter85+_CR_'  + str(year)  + '.png'
+        if category == 999:
+            filename = 'snatch_jerck_scatter85+_CR_' + str(year) + '.png'
         else:
-            filename='snatch_jerck_scatter' + str(category) + '_CR_'  + str(year)  + '.png'
+            filename = 'snatch_jerck_scatter' + str(category) + '_CR_' + str(year) + '.png'
         plt.savefig(path+filename, dpi=dpi)
-
 
     plt.show(not test)
     return None
