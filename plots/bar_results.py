@@ -138,6 +138,7 @@ def draw_master_lines(year, category, disc):
     plt.setp(plt.gca().get_legend().get_texts(), fontsize='15') 
 
 
+# todo make reuse for BI
 def bar_result_weightLC(df, category, year, save=False, dpi=80, test=False):
     discipline = 'Толчок ДЦ'
     df = df[(df['в/к'] == category) & (df['Год'] == year) & (df['Вид'] == 'ДЦ')]
@@ -145,16 +146,17 @@ def bar_result_weightLC(df, category, year, save=False, dpi=80, test=False):
     results = df[discipline].map('{0:g}'.format)
     names = df['Ф.И.']
 
+    #todo find out
     # ymin = df['Соб. вес'].min()
     weight_ylim=(50, 120)
 
     # figure_width=len(df[discipline])*0.8
     figure_width = len(df)*0.9
-    title_color = 'g' #'navy'
+    title_color = 'g'
 
     fig, ax1 = plt.subplots(1, 1, figsize=(figure_width,8))
 
-    ax1.bar(df['Ф.И.'], df[discipline], color='skyblue',  zorder=3) #color='tomato',
+    ax1.bar(df['Ф.И.'], df[discipline], color='skyblue',  zorder=3)
 
     ax1.set_ylabel(discipline, size=18)
     ax1.grid(axis='y', zorder=0)
@@ -162,19 +164,15 @@ def bar_result_weightLC(df, category, year, save=False, dpi=80, test=False):
     ax2=ax1.twinx()
     ax2.bar(df['Ф.И.'], df['Соб. вес'], color='w', alpha=0.6)
 
-    if category == 63:
-        weight_ylim = (50, 90)
-    elif category == 68:
-        weight_ylim = (62, 102)
-    elif category == 73:
-        weight_ylim = (65, 105)
-    elif category == 85:
-        weight_ylim = (70, 120)
-    elif category == 999:
-        weight_ylim = (80, 180)
+    weight_ylim = {
+        63: (50, 90),
+        68: (62, 102),
+        73: (65, 105),
+        85: (70, 120),
+        999: (80, 180),
+    }[category]
 
     ax2.set_ylim(weight_ylim)
-
     ax2.set_xticks([])
     ax2.set_ylabel('собственный вес, кг', size=18)
 
