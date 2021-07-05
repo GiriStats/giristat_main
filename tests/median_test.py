@@ -22,5 +22,5 @@ def draw_three_medians_test():
         mm.draw_three_medians(df, discipline=discipline, years=[2018, 2019, 2020],  test=True)
 
 
-draw_median_test()
-draw_three_medians_test()
+# draw_median_test()
+# draw_three_medians_test()
