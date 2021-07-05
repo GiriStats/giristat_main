@@ -3,147 +3,118 @@ import sys
 sys.path.append("/home/aleksei/Dropbox/GiriStat/giristat_main")
 import data_processing.prepare_merged_data as perd
 
-# join methods for BI and LC
-def bar_resultsLC(df, category, year, save=False, dpi=80, test=False):
-    discipline_title = 'ДЦ'
+
+def bar_results(disc, df, category, year, save=False, dpi=80, test=False):
+    if disc not in {'BI','LC'}:
+        print("Disc must be LC or BI")
+    discipline_title = {
+        "LC": 'ДЦ',
+        "BI": 'Двоеборье',
+    }[disc]
+
     df = df[(df['в/к'] == category) & (df['Год'] == year) & (df['Вид'] == discipline_title)]
-
     names = df['Ф.И.']
-    gold = df[:1]
-    silver = df[1:2]
-    bronze = df[2:3]
-    title_color = 'g'
 
-    figure_width = len(df)
+    if disc == "LC":
+        discipline = 'Толчок ДЦ'
+        ax = draw_bars(df, discipline)
+        build_second_bars_LC(ax)
+    elif disc == 'BI':
+        discipline = 'Сумма дв-рья'
+        ax = draw_bars(df, discipline)
+        df['sum_str'] = df[discipline].map('{0:g}'.format)
+        sums = df['sum_str']
+        build_second_bars_BI(ax, sums)
 
-    fig, ax = plt.subplots(1, 1, figsize=(figure_width, 10))
-    ax.bar(df['Ф.И.'], df['Толчок ДЦ'], color='skyblue', zorder=3)
-    ax.bar(df['Ф.И.'], (df['Толчок ДЦ']), color='paleturquoise', zorder=3, alpha=0)
-    ax.bar(gold['Ф.И.'], (gold['Толчок ДЦ']), color='gold', zorder=3, alpha=1)
-    ax.bar(silver['Ф.И.'], (silver['Толчок ДЦ']), color='silver', zorder=3, alpha=1)
-    ax.bar(bronze['Ф.И.'], (bronze['Толчок ДЦ']), color='orange', zorder=3, alpha=1)
-
-    ax.set_xticks([])
-    ax.grid(axis='y', zorder=0)
-    ax.set_ylabel('Толчок ДЦ', size=18)
-
-    if category == 999:
-        ax.set_title('Чемпионат России ' + str(year) + '. ' + discipline_title + ', вк ' + df['vk'].any(), color=title_color, fontsize=32)
-    else:
-        ax.set_title('Чемпионат России ' + str(year) + '. ' + discipline_title + ', вк ' + str(category), color=title_color, fontsize=32)
-
-    lenght = int(len(ax.patches)/2-1)
-
-    i = 0
-    for b in ax.patches[:lenght]:
-        ax.annotate(str(names.values[i]), 
-                    (b.get_x()+b.get_width()/2, 2), 
-                    color='royalblue',
-                    va='bottom',
-                    ha='center',
-                    rotation=90,
-                    size=30)
-        i = i+1
-
-    for b in ax.patches[int(len(ax.patches)/2):]:
-        ax.annotate(str(int(b.get_height())), 
-                    (b.get_x(), b.get_height()), 
-                    color='dimgray',
-                    size=30)
-
-    draw_master_lines(year, category, discipline_title)
-
+    set_title(ax, category, df, discipline_title, year)
+    annotate_bars_with_names(ax,  names)
+    draw_master_lines(year, category, disc)
     plt.tight_layout()
 
-    if save:
-        path = '../giristat/images/'
-        if category == 999:
-            filename = 'bar_resultsLC85+_CR_' + str(year) + '.png'
-        else:
-            filename = 'bar_resultsLC' + str(category) + '_CR_' + str(year) + '.png'
-        plt.savefig(path+filename, dpi=dpi)
-
+    save_img(category, dpi, year, save)
     plt.show(not test)
     return None
 
-# join methods for BI and LC
-def bar_resultsBI(df, category, year, save=False, dpi=80, test=False):
-    discipline = 'Сумма дв-рья'
-    discipline_title = 'Двоеборье'
 
-    df = df[(df['в/к'] == category) & (df['Год'] == year) & (df['Вид'] == discipline_title)]
-
-    df['sum_str'] = df[discipline].map('{0:g}'.format)
-    sums = df['sum_str']
-    
-    names = df['Ф.И.']
+def draw_bars(df, discipline):
     gold = df[:1]
     silver = df[1:2]
     bronze = df[2:3]
-    title_color = 'g'
-
     figure_width = len(df)
-
     fig, ax = plt.subplots(1, 1, figsize=(figure_width, 10))
     ax.bar(df['Ф.И.'], df[discipline], color='skyblue', zorder=3)
     ax.bar(df['Ф.И.'], (df[discipline]), color='paleturquoise', zorder=3, alpha=0)
     ax.bar(gold['Ф.И.'], (gold[discipline]), color='gold', zorder=3, alpha=1)
     ax.bar(silver['Ф.И.'], (silver[discipline]), color='silver', zorder=3, alpha=1)
     ax.bar(bronze['Ф.И.'], (bronze[discipline]), color='orange', zorder=3, alpha=1)
-
     ax.set_xticks([])
     ax.grid(axis='y', zorder=0)
-    ax.set_ylabel(discipline, size=18)
+    ax.set_ylabel('Толчок ДЦ', size=18)
+    return ax
 
-    if category == 999:
-        ax.set_title('Чемпионат России ' + str(year) + '. ' + discipline_title + ', вк ' + df['vk'].any(), color=title_color, fontsize=32)
-    else:
-        ax.set_title('Чемпионат России ' + str(year) + '. ' + discipline_title + ', вк ' + str(category), color=title_color, fontsize=32)
 
+def save_img(category, dpi, year, save):
+    if save:
+        path = '../giristat/images/'
+        if category == 999:
+            filename = 'bar_resultsLC85+_CR_' + str(year) + '.png'
+        else:
+            filename = 'bar_resultsLC' + str(category) + '_CR_' + str(year) + '.png'
+        plt.savefig(path + filename, dpi=dpi)
+
+
+def annotate_bars_with_names(ax, names):
     lenght = int(len(ax.patches)/2-1)
-
     i = 0
     for b in ax.patches[:lenght]:
-        ax.annotate(str(names.values[i]), 
-                    (b.get_x()+b.get_width()/2, 2), 
+        ax.annotate(str(names.values[i]),
+                    (b.get_x() + b.get_width() / 2, 2),
                     color='royalblue',
                     va='bottom',
                     ha='center',
                     rotation=90,
                     size=30)
-        i = i+1
+        i = i + 1
 
-    i = 0
-    for b in ax.patches[:lenght]:
-        ax.annotate(str(sums.values[i]), 
-                    (b.get_x(), b.get_height()), 
+
+def set_title(ax, category, df, discipline_title, year):
+    title_color = 'g'
+    if category == 999:
+        ax.set_title('Чемпионат России ' + str(year) + '. ' + discipline_title + ', вк ' + df['vk'].any(),
+                     color=title_color, fontsize=32)
+    else:
+        ax.set_title('Чемпионат России ' + str(year) + '. ' + discipline_title + ', вк ' + str(category),
+                     color=title_color, fontsize=32)
+
+
+def build_second_bars_LC(ax):
+    for b in ax.patches[int(len(ax.patches)/2):]:
+        ax.annotate(str(int(b.get_height())),
+                    (b.get_x(), b.get_height()),
                     color='dimgray',
                     size=30)
-        i = i+1
-
-    draw_master_lines(year, category, discipline_title)
-    #todo add xticks
-
-    plt.tight_layout()
-
-    if save:
-        path = '../giristat/images/'
-        if category == 999:
-            filename = 'bar_resultsBI85+_CR_'  + str(year)  + '.png'
-        else:
-            filename = 'bar_resultsBI' + str(category) + '_CR_'  + str(year)  + '.png'
-        plt.savefig(path+filename, dpi=dpi)
-
-    plt.show(not test)
     return None
 
 
-def draw_master_lines(year, category, discipline_title):
+def build_second_bars_BI(ax, sums):
+    i = 0
+    for b in ax.patches[:int(len(ax.patches)/2-1)]:
+        ax.annotate(str(sums.values[i]),
+                    (b.get_x(), b.get_height()),
+                    color='dimgray',
+                    size=30)
+        i = i + 1
+
+
+def draw_master_lines(year, category, disc):
     norms = perd.get_norms(year)
-    if discipline_title == 'Двоеборье':
+    if disc == 'BI':
         discipline = "BI"
-    elif discipline_title == "ДЦ":
+    elif disc == "LC":
         discipline = "LC"
+    else:
+        print("discipline_title must be secific value")
+        return
 
     norms_bi = norms[(norms['discipline'] == discipline)]
 
