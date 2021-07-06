@@ -16,7 +16,7 @@ def bar_results(disc, df, category, year, save=False, dpi=80, test=False):
         print("Disc must be LC or BI")
         return 
     discipline_title = {
-        "LC": 'JerkLC',
+        "LC": 'ДЦ',
         "BI": 'Двоеборье',
     }[disc]
 
@@ -24,7 +24,7 @@ def bar_results(disc, df, category, year, save=False, dpi=80, test=False):
     names = df['Name']
 
     if disc == "LC":
-        discipline = 'JerkLC'
+        discipline = 'Толчок ДЦ'
         ax = draw_bars(df, discipline)
         build_second_bars_LC(ax)
     elif disc == 'BI':
@@ -88,7 +88,7 @@ def annotate_bars_with_names(ax, names):
 def set_title(ax, category, df, discipline_title, year):
     title_color = 'g'
     if category == 999:
-        ax.set_title('Чемпионат России ' + str(year) + '. ' + discipline_title + ', вк ' + df['WC_t'].any(),
+        ax.set_title('Чемпионат России ' + str(year) + '. ' + discipline_title + ', вк ' + df['WC'].any(),
                      color=title_color, fontsize=32)
     else:
         ax.set_title('Чемпионат России ' + str(year) + '. ' + discipline_title + ', вк ' + str(category),
@@ -126,9 +126,9 @@ def draw_master_lines(year, category, disc):
 
     norms_bi = norms[(norms['discipline'] == discipline)]
 
-    msmk_bi_cat = norms_bi[(norms_bi['title'] == "MSMK") & (norms_bi['weight_category'] == category)]
-    ms_bi_cat = norms_bi[(norms_bi['title'] == "MS") & (norms_bi['weight_category'] == category)]
-    kms_bi_cat = norms_bi[(norms_bi['title'] == "KMS") & (norms_bi['weight_category'] == category)]
+    msmk_bi_cat = norms_bi[(norms['title'] == "MSMK") & (norms_bi['weight_category'] == category)]
+    ms_bi_cat = norms_bi[(norms['title'] == "MS") & (norms_bi['weight_category'] == category)]
+    kms_bi_cat = norms_bi[(norms['title'] == "KMS") & (norms_bi['weight_category'] == category)]  
 
     msmk = msmk_bi_cat.iloc[0]['result']
     ms = ms_bi_cat.iloc[0]['result']
@@ -211,7 +211,7 @@ def bar_result_weightLC(df, category, year, save=False, dpi=80, test=False):
         i = i+1
 
     if category == 999:
-        ax1.set_title('Чемпионат России ' + str(year) + '. ДЦ, вк ' + df['WC_t'].any(), color=title_color, fontsize=32)
+        ax1.set_title('Чемпионат России ' + str(year) + '. ДЦ, вк ' + df['WC'].any(), color=title_color, fontsize=32)
     else:
         ax1.set_title('Чемпионат России ' + str(year) + '. ДЦ, вк ' + str(category), color=title_color, fontsize=32)
 
