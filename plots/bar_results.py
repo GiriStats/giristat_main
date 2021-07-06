@@ -16,7 +16,7 @@ def bar_results(disc, df, category, year, save=False, dpi=80, test=False):
         print("Disc must be LC or BI")
         return 
     discipline_title = {
-        "LC": 'JerkLC',
+        "LC": 'ДЦ',
         "BI": 'Двоеборье',
     }[disc]
 

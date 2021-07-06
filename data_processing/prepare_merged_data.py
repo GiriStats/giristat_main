@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def get_df(file1, file2):
+def get_mearged_df(file1, file2):
     # 'source/RC_LC_2017-20.csv'
     # 'source/RC_BI_2017-20.csv'
     df_lc = pd.read_csv(file1)
@@ -38,6 +38,33 @@ def get_df(file1, file2):
     df['NameCoach'] = df['NameCoach'].apply(lambda x: str.strip(x))
     df['WC_t'] = df['WC'].apply(lambda x: str(x))
 
+    df.loc[(df['Year'] == 2017) & (df['WC_t']=='999'), 'WC_t'] = "95+"
+    df.loc[(df['Year'] != 2017) & (df['WC_t']=='999'), 'WC_t'] = "85+"
+
+    return df
+
+def get_df(file1):
+    # All-RC-2017-20.csv
+    df = pd.read_csv(file1)
+    df = df.rename(columns={'Ком. очки': 'Очки',
+                            'Сумма       дв-рья': 'Сумма дв-рья',
+                            'Unnamed: 11': 'Рывок (очки)'})
+    df = df.drop(columns={'Unnamed: 2', 'Unnamed: 18'})
+    df = df[df['Jerk'] != "снят врачом"]
+    df = df[df['Jerk'] != "Снят врачом"]
+    df = df[df['Сумма дв-рья'] != "снят врачом"]
+    df = df[df['JerkLC'] != "снят врачом"]
+    df = df[df['Weight'] != "снят врачом"]
+
+    df['Weight'] = df['Weight'].str.replace(',', '.').astype(float)
+    df['JerkLC'] = pd.to_numeric(df['JerkLC'])
+    df['Jerk'] = pd.to_numeric(df['Jerk'])
+    df['Weight'] = pd.to_numeric(df['Weight'])
+    df['Сумма дв-рья'] = pd.to_numeric(df['Сумма дв-рья'])
+    df['Name'] = df['Name'].apply(lambda x: str.strip(x))
+    df['NameCoach'] = df['NameCoach'].astype(str)
+    df['NameCoach'] = df['NameCoach'].apply(lambda x: str.strip(x))
+    df['WC_t'] = df['WC'].apply(lambda x: str(x))
     df.loc[(df['Year'] == 2017) & (df['WC_t']=='999'), 'WC_t'] = "95+"
     df.loc[(df['Year'] != 2017) & (df['WC_t']=='999'), 'WC_t'] = "85+"
 
