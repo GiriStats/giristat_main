@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import prepere_merged_file as pf
 
-df = pf.get_mearged_df()
+df = pf.get_merged_df()
 
 df_lc = df[df['Discipline'] == 'ДЦ']
 df_bi = df[df['Discipline'] == 'Двоеборье']

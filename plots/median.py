@@ -63,7 +63,8 @@ def draw_three_medians(df, discipline, years, save=False, dpi=80, test=False):
         filename = 'Median_catagories_' + switcher.get(discipline, 'UN') + '_CR_' + str(years) + '.png'
         plt.savefig(path+filename, dpi=dpi)
         
-    plt.show(not test)
+    # plt.show(not test)
+    plt.show() #TODO
     return None
 
 
@@ -99,8 +100,9 @@ def draw_median(df, discipline, year, save=False, dpi=80, test=False):
         path = '../giristat/images/'
         filename = 'Median_categories_' + switcher.get(discipline, 'UN') + '_CR_' + str(year) + '.png'
         plt.savefig(path+filename, dpi=dpi)
-    
-    plt.show(not test)
+
+    plt.show() #TODO
+    # plt.show(not test)
     return None
 
 

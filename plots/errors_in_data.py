@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import prepere_merged_file as pf
 
-df = pf.get_mearged_df()
+df = pf.get_merged_df()
 
 #get 85+ category for 2020 
 df2020_85p_bi = df[(df['Year'] == 2020) & (df['Discipline'] == 'Двоеборье') & (df['WC'] == 999)]

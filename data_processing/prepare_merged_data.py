@@ -31,7 +31,7 @@ class DataEntry:
 
 
 
-def get_mearged_df(file1, file2):
+def get_merged_df(file1, file2):
     # 'source/RC_LC_2017-20.csv'
     # 'source/RC_BI_2017-20.csv'
     df_lc = pd.read_csv(file1)
@@ -41,6 +41,7 @@ def get_mearged_df(file1, file2):
     df_lc = df_lc.drop(columns={'Unnamed: 2',
                                 'Unnamed: 12'})
     df_lc = df_lc[df_lc['JerkLC'] != "снят врачом"]
+    df_lc = df_lc[df_lc['JerkLC'] != 'Снят  врачом']
     df_lc['JerkLC'] = pd.to_numeric(df_lc['JerkLC'])
     df_lc['Weight'] = pd.to_numeric(df_lc['Weight'])
 
@@ -53,6 +54,7 @@ def get_mearged_df(file1, file2):
                                 'Snatch':'Snatch'})
     df_bi = df_bi[df_bi['Jerk'] != "Cнят врачом"]
     df_bi = df_bi[df_bi['Jerk'] != "Снят врачом"]
+    df_bi = df_bi[df_bi['Snatch'] != "Снят  врачом"]
     df_bi = df_bi[df_bi['Weight'] != "снят врачом"]
     df_bi = df_bi[df_bi['Сумма дв-рья'] != "снят врачом"]
     df_bi['Jerk'] = pd.to_numeric(df_bi['Jerk'])

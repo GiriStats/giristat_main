@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 PACKAGE_PARENT = '..'
 from prepere_merged_file import get_df
 
-df = pf.get_mearged_df()
+df = pf.get_merged_df()
 
 df2017 = df[df['Year'] == 2017]
 
