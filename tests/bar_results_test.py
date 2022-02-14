@@ -4,7 +4,7 @@ import data_processing.prepare_merged_data as perd
 import plots.bar_results as br
 
 
-# df = perd.get_mearged_df('source/RC_LC_2017-20.csv', 'source/RC_BI_2017-20.csv')
+df = perd.get_merged_df('../source/RC_LC_2017-21.csv', '../source/RC_BI_2017-21.csv')
 
 # categories=set(df[df['Year'] == 2020]['WC'])
 
