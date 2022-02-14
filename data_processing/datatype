@@ -1,0 +1,16 @@
+from enum import Enum
+
+
+
+
+class Discipline:
+    name = ''
+    code = ''
+
+
+class Discipline(Enum):
+    JERK = 1
+    SNATCH = 2
+    JERK_LC = 3
+    BI_SUMM = 4
+
