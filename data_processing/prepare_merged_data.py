@@ -105,7 +105,7 @@ def get_df(file1):
 
 
 def get_norms(year):
-    norms = pd.read_csv('../source/norms.csv')
+    norms = pd.read_csv('source/norms.csv')
     year_norms = norms[(norms['year_from'] == year) | (norms['year_to'] == year) | (norms['year2'] == year) | (norms['year3'] == year)]
     return year_norms
 

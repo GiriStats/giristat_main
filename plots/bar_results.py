@@ -25,11 +25,11 @@ def bar_results(disc, df, category, year, save=False, dpi=80, test=False):
 
     if disc == "LC":
         discipline = 'JerkLC'
-        ax = draw_bars(df, discipline)
+        ax = draw_bars(df, disc, discipline)
         build_second_bars_LC(ax)
     elif disc == 'BI':
         discipline = 'Сумма дв-рья'
-        ax = draw_bars(df, discipline)
+        ax = draw_bars(df, disc, discipline)
         df['sum_str'] = df[discipline].map('{0:g}'.format)
         sums = df['sum_str']
         build_second_bars_BI(ax, sums)
@@ -39,12 +39,12 @@ def bar_results(disc, df, category, year, save=False, dpi=80, test=False):
     draw_master_lines(year, category, disc)
     plt.tight_layout()
 
-    save_img(category, dpi, year, save)
+    save_img(disc, category, dpi, year, save)
     plt.show(not test)
     return None
 
 
-def draw_bars(df, discipline):
+def draw_bars(df, disc, discipline):
     gold = df[:1]
     silver = df[1:2]
     bronze = df[2:3]
@@ -57,17 +57,27 @@ def draw_bars(df, discipline):
     ax.bar(bronze['Name'], (bronze[discipline]), color='orange', zorder=3, alpha=1)
     ax.set_xticks([])
     ax.grid(axis='y', zorder=0)
-    ax.set_ylabel('Толчок ДЦ', size=18)
+    if disc == 'BI':
+        ylabel = 'Сумма двоеборья'
+    else:
+        ylabel = 'Толчок ДЦ'
+    ax.set_ylabel(ylabel, size=18)
     return ax
 
 
-def save_img(category, dpi, year, save):
+def save_img(disc, category, dpi, year, save):
     if save:
         path = '../giristat/images/'
         if category == 999:
-            filename = 'bar_resultsLC85+_CR_' + str(year) + '.png'
+            if disc == 'BI':
+                filename = 'bar_resultsBI85+_CR_' + str(year) + '.png'
+            else:
+                filename = 'bar_resultsLC85+_CR_' + str(year) + '.png'
         else:
-            filename = 'bar_resultsLC' + str(category) + '_CR_' + str(year) + '.png'
+            if disc == 'BI':
+                filename = 'bar_resultsBI' + str(category) + '_CR_' + str(year) + '.png'
+            else:
+                filename = 'bar_resultsLC' + str(category) + '_CR_' + str(year) + '.png'
         plt.savefig(path + filename, dpi=dpi)
 
 
